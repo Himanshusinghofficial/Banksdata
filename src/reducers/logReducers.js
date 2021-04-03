@@ -24,7 +24,7 @@ import {
         return {
           ...state,
           filtered: state.logs.filter(log => {
-              return  action.payload==""? null: log.bank_name.toUpperCase().indexOf((action.payload))>-1 || log.state.toLowerCase().indexOf(action.payload)>-1 || log.address.toLowerCase().indexOf(action.payload)>-1 || log.ifsc.toLowerCase().indexOf(action.payload)>-1 || log.district.toLowerCase().indexOf(action.payload)>-1 || log.city.toLowerCase().indexOf(action.payload)>-1 || log.branch.toLowerCase().indexOf(action.payload)>-1
+              return  action.payload===""? null: log.bank_name.toUpperCase().indexOf((action.payload))>-1 || log.state.toLowerCase().indexOf(action.payload)>-1 || log.address.toLowerCase().indexOf(action.payload)>-1 || log.ifsc.toLowerCase().indexOf(action.payload)>-1 || log.district.toLowerCase().indexOf(action.payload)>-1 || log.city.toLowerCase().indexOf(action.payload)>-1 || log.branch.toLowerCase().indexOf(action.payload)>-1
          })
         };
       case SET_LOADING:

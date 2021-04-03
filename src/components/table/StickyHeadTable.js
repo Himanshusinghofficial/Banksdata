@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -66,17 +66,25 @@ const StickyHeadTable = ({ log: { logs,filtered}}) => {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [prev, setPrev] = React.useState(0);
   const [rows,setrows] = React.useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    setPrev(logs.length);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
+  
+  useEffect(() => {
+    if(logs.length!=prev || filtered.length!=prev){
+      setPage(0);
+    }  
+  }, [logs,prev,filtered])
+  
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
@@ -95,7 +103,7 @@ const StickyHeadTable = ({ log: { logs,filtered}}) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filtered.length==0?(logs.length==0?rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+            {filtered.length===0?(logs.length===0?rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                   {columns.map((column) => {
@@ -112,7 +120,7 @@ const StickyHeadTable = ({ log: { logs,filtered}}) => {
             logs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {columns.map((column) => {
+                  {/* {columns.map((column) => {
                     const value = row[column.id];
                     return (
                       <>
@@ -121,7 +129,19 @@ const StickyHeadTable = ({ log: { logs,filtered}}) => {
                       </TableCell>
                       </>
                     );
-                  })}
+                  })} */}
+                    <TableCell padding="checkbox">
+                        <Checkbox />
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.bank_name}
+                      </TableCell>
+                      <TableCell align="center">{row.address}</TableCell>
+                      <TableCell align="center">{row.branch}</TableCell>
+                      <TableCell align="center">{row.ifsc}</TableCell>
+                      <TableCell align="center">{row.city}</TableCell>
+                      <TableCell align="center">{row.district}</TableCell>
+                      <TableCell align="center">{row.state}</TableCell>
                 </TableRow>
            
               );
@@ -129,14 +149,26 @@ const StickyHeadTable = ({ log: { logs,filtered}}) => {
           ):filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {columns.map((column) => {
+                  {/* {columns.map((column) => {
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                       </TableCell>
                     );
-                  })}
+                  })} */}
+                     <TableCell padding="checkbox">
+                        <Checkbox />
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.bank_name}
+                      </TableCell>
+                      <TableCell align="center">{row.address}</TableCell>
+                      <TableCell align="center">{row.branch}</TableCell>
+                      <TableCell align="center">{row.ifsc}</TableCell>
+                      <TableCell align="center">{row.city}</TableCell>
+                      <TableCell align="center">{row.district}</TableCell>
+                      <TableCell align="center">{row.state}</TableCell>
                 </TableRow>
               );
             })}
@@ -144,9 +176,9 @@ const StickyHeadTable = ({ log: { logs,filtered}}) => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100, 1000]}
+        rowsPerPageOptions={[10, 50, 100, 500, 1000]}
         component="div"
-        count={rows.length}
+        count={filtered.length===0?logs.length:filtered.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
